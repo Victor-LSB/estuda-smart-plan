@@ -4,7 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useStudy } from '@/context/StudyContext';
 
 const AnalyticsScreen: React.FC = () => {
-  const { activities, getTotalStudyHours, getCompletionRate } = useStudy();
+  const { activities, getTotalStudyHours } = useStudy();
+
+  const getCompletionRate = () => {
+    if (activities.length === 0) return 0;
+    const completedCount = activities.filter(activity => activity.completed).length;
+    return (completedCount / activities.length) * 100;
+  };
 
   // Calculate daily study hours for the last 7 days
   const getLast7DaysData = () => {

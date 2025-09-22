@@ -10,7 +10,7 @@ interface StudyScreenProps {
 }
 
 const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
-  const { activities, toggleActivityCompletion } = useStudy();
+  const { activities, toggleActivity } = useStudy();
 
   // Sort activities by date and time
   const sortedActivities = [...activities].sort((a, b) => {
@@ -62,7 +62,7 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
                   <button
-                    onClick={() => toggleActivityCompletion(activity.id)}
+                    onClick={() => toggleActivity(activity.id)}
                     className="flex-shrink-0"
                   >
                     {activity.completed ? (

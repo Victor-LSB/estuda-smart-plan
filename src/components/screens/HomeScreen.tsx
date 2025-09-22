@@ -1,8 +1,9 @@
 import React from 'react';
-import { BookOpen, Calendar, BarChart3, Clock, User } from 'lucide-react';
+import { BookOpen, Calendar, BarChart3, Clock, User, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useStudy } from '@/context/StudyContext';
+import { useAuth } from '@/context/AuthContext';
 import { NavigationTab } from '@/types';
 
 interface HomeScreenProps {
@@ -10,8 +11,38 @@ interface HomeScreenProps {
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
-  const { getNextActivity, getTotalStudyHours, getCompletionRate } = useStudy();
+  const { activities, getTotalStudyHours, getCompletedActivitiesCount } = useStudy();
+  const { user, signOut } = useAuth();
+  
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuário';
+  
+  const getNextActivity = () => {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    const currentTime = today.toTimeString().slice(0, 5);
+    
+    return activities
+      .filter(activity => 
+        !activity.completed && 
+        (activity.date > todayStr || 
+         (activity.date === todayStr && activity.time >= currentTime))
+      )
+      .sort((a, b) => {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return a.time.localeCompare(b.time);
+      })[0];
+  };
+
+  const getCompletionRate = () => {
+    if (activities.length === 0) return 0;
+    return (getCompletedActivitiesCount() / activities.length) * 100;
+  };
+
   const nextActivity = getNextActivity();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   const quickAccessItems = [
     {
@@ -36,15 +67,25 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
 
   return (
     <div className="p-4 space-y-6">
-      {/* Header */}
-      <div className="flex items-center space-x-3 pt-2">
-        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-          <User className="w-6 h-6 text-primary" />
+      {/* Header with user greeting and logout */}
+      <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center space-x-3">
+          <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+            <User className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-medium text-foreground">Olá, {userName} 👋</h1>
+            <p className="text-muted-foreground">Pronto para estudar hoje?</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-medium text-foreground">Hello, Victor 👋</h1>
-          <p className="text-muted-foreground">Ready to study today?</p>
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleSignOut}
+          className="text-muted-foreground hover:text-destructive"
+        >
+          <LogOut className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* Quick Access Cards */}
@@ -100,14 +141,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
               </div>
             ) : (
               <div className="text-center py-4">
-                <p className="text-muted-foreground">No upcoming activities</p>
+                <p className="text-muted-foreground">Nenhuma atividade próxima</p>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   className="mt-2"
                   onClick={() => onTabChange('study')}
                 >
-                  Add Activity
+                  Adicionar Atividade
                 </Button>
               </div>
             )}
@@ -121,7 +162,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
           <CardContent className="p-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-primary">{getTotalStudyHours().toFixed(1)}h</p>
-              <p className="text-xs text-muted-foreground">Total Study Time</p>
+              <p className="text-xs text-muted-foreground">Tempo Total</p>
             </div>
           </CardContent>
         </Card>
@@ -129,7 +170,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
           <CardContent className="p-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-primary">{getCompletionRate().toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground">Completion Rate</p>
+              <p className="text-xs text-muted-foreground">Taxa de Conclusão</p>
             </div>
           </CardContent>
         </Card>
