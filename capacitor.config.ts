@@ -4,10 +4,7 @@ const config: CapacitorConfig = {
   appId: 'app.lovable.df628a033d26436eb0265455df12555a',
   appName: 'estuda-smart-plan',
   webDir: 'dist',
-  server: {
-    url: "https://df628a03-3d26-436e-b026-5455df12555a.lovableproject.com?forceHideBadge=true",
-    cleartext: true
-  },
+  server: {}, // Removido o conteúdo do servidor
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,

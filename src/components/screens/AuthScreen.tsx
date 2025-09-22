@@ -50,9 +50,10 @@ const AuthScreen = () => {
           });
         } else {
           toast({
-            title: "Conta criada!",
-            description: "Verifique seu email para confirmar a conta",
+            title: "Conta criada com sucesso!",
+            description: "Você já pode fazer o login.",
           });
+          setIsLogin(true); // Opcional: Redireciona para a tela de login
         }
       }
     } catch (error) {
@@ -82,7 +83,7 @@ const AuthScreen = () => {
             </CardDescription>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
@@ -102,7 +103,7 @@ const AuthScreen = () => {
                 </div>
               </div>
             )}
-            
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -118,7 +119,7 @@ const AuthScreen = () => {
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Senha</Label>
               <div className="relative">
@@ -141,12 +142,12 @@ const AuthScreen = () => {
                 </button>
               </div>
             </div>
-            
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Carregando...' : (isLogin ? 'Entrar' : 'Criar Conta')}
             </Button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <button
               type="button"

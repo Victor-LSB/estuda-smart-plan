@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">estuda-smart-plan</string>
+    <string name="title_activity_main">estuda-smart-plan</string>
+    <string name="package_name">app.lovable.df628a033d26436eb0265455df12555a</string>
+    <string name="custom_url_scheme">app.lovable.df628a033d26436eb0265455df12555a</string>
+</resources>

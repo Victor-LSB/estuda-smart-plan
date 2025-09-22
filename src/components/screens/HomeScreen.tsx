@@ -14,17 +14,18 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
   const { activities, getTotalStudyHours, getCompletedActivitiesCount } = useStudy();
   const { user, signOut } = useAuth();
   
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuário';
-  
+  const fullName = user?.user_metadata?.full_name || user?.email || 'Usuário';
+  const firstName = fullName.split(' ')[0];
+
   const getNextActivity = () => {
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
     const currentTime = today.toTimeString().slice(0, 5);
-    
+
     return activities
-      .filter(activity => 
-        !activity.completed && 
-        (activity.date > todayStr || 
+      .filter(activity =>
+        !activity.completed &&
+        (activity.date > todayStr ||
          (activity.date === todayStr && activity.time >= currentTime))
       )
       .sort((a, b) => {
@@ -55,7 +56,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
       id: 'calendar' as NavigationTab,
       icon: Calendar,
       label: 'Calendar',
-      color: 'bg-secondary',
+      color: 'bg-primary',
     },
     {
       id: 'analytics' as NavigationTab,
@@ -74,7 +75,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onTabChange }) => {
             <User className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-medium text-foreground">Olá, {userName} 👋</h1>
+            <h1 className="text-2xl font-medium text-foreground">Olá, {firstName} 👋</h1>
             <p className="text-muted-foreground">Pronto para estudar hoje?</p>
           </div>
         </div>

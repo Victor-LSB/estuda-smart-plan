@@ -7,7 +7,7 @@ import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { StudyProvider } from "@/context/StudyContext";
 import Layout from "@/components/Layout";
 import HomeScreen from "@/components/screens/HomeScreen";
-import StudyScreen from "@/components/screens/StudyScreen"; 
+import StudyScreen from "@/components/screens/StudyScreen";
 import RegisterActivityScreen from "@/components/screens/RegisterActivityScreen";
 import CalendarScreen from "@/components/screens/CalendarScreen";
 import AnalyticsScreen from "@/components/screens/AnalyticsScreen";

@@ -12,7 +12,6 @@ interface StudyScreenProps {
 const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
   const { activities, toggleActivity } = useStudy();
 
-  // Sort activities by date and time
   const sortedActivities = [...activities].sort((a, b) => {
     const dateTimeA = new Date(`${a.date}T${a.time}`);
     const dateTimeB = new Date(`${b.date}T${b.time}`);
@@ -52,8 +51,8 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
           </Card>
         ) : (
           sortedActivities.map((activity) => (
-            <Card 
-              key={activity.id} 
+            <Card
+              key={activity.id}
               className={cn(
                 "border-2 transition-all",
                 activity.completed ? "bg-muted/30 border-primary/30" : "hover:border-primary/50"
@@ -71,7 +70,7 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
                       <Circle className="w-6 h-6 text-muted-foreground hover:text-primary transition-colors" />
                     )}
                   </button>
-                  
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -88,7 +87,7 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
                           </p>
                         )}
                       </div>
-                      
+
                       <div className="flex flex-col items-end space-y-1 text-sm flex-shrink-0">
                         <div className="flex items-center space-x-1 text-primary">
                           <Clock size={14} />
@@ -96,9 +95,9 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
                         </div>
                         <div className="text-right">
                           <p className="text-xs text-muted-foreground">
-                            {new Date(activity.date).toLocaleDateString('en-US', { 
-                              month: 'short', 
-                              day: 'numeric' 
+                            {new Date(activity.date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric'
                             })}
                           </p>
                           <p className="text-xs font-medium text-foreground">{activity.time}</p>
@@ -113,9 +112,11 @@ const StudyScreen: React.FC<StudyScreenProps> = ({ onAddActivity }) => {
         )}
       </div>
 
-      {/* Floating Add Button (only show when there are activities) */}
+
+      {/* Botão Flutuante de Adicionar */}
       {sortedActivities.length > 0 && (
-        <div className="fixed bottom-24 right-4">
+        // Posição ajustada para ficar acima da barra de navegação
+        <div className="fixed bottom-44 right-4 mb-safe-bottom">
           <Button
             onClick={onAddActivity}
             size="lg"
